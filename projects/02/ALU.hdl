@@ -16,13 +16,18 @@
 
 // Implementation: the ALU logic manipulates the x and y inputs
 // and operates on the resulting values, as follows:
+
 // if (zx == 1) set x = 0        // 16-bit constant
 // if (nx == 1) set x = !x       // bitwise not
+
 // if (zy == 1) set y = 0        // 16-bit constant
 // if (ny == 1) set y = !y       // bitwise not
+
 // if (f == 1)  set out = x + y  // integer 2's complement addition
 // if (f == 0)  set out = x & y  // bitwise and
+
 // if (no == 1) set out = !out   // bitwise not
+
 // if (out == 0) set zr = 1
 // if (out < 0) set ng = 1
 
@@ -42,5 +47,49 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    // [x]  
+    Mux16 (a=x, b[0..15]=false, sel=zx, out=stage1x);
+    Not16 (in=stage1x, out=stage2x);
+    Mux16 (a=stage1x, b=stage2x, sel=nx, out=stage3x);
+
+    // [y]  
+    Mux16 (a=y, b[0..15]=false, sel=zy, out=stage1y);
+    Not16 (in=stage1y, out=stage2y);
+    Mux16 (a=stage1y, b=stage2y, sel=ny, out=stage3y);
+
+    // [x+y]
+    Add16 (a=stage3x, b=stage3y, out=stage1); 
+
+    // [x & y]
+    And16 (a=stage3x, b=stage3y, out=stage2);
+    
+    Mux16 (a=stage2, b=stage1, sel=f, out=stage3);
+
+    // Final invertion
+    Not16 (in=stage3, out=stage4);
+
+    // out
+    Mux16 (a=stage3, b=stage4, sel=no, out[15]=ng, out=out, out=stage5);
+
+    // zr
+    Not16 (in=stage5, out[0]=stage4-0,out[1]=stage4-1,out[2]=stage4-2,out[3]=stage4-3,out[4]=stage4-4,out[5]=stage4-5,out[6]=stage4-6,out[7]=stage4-7,out[8]=stage4-8,out[9]=stage4-9,out[10]=stage4-10,out[11]=stage4-11,out[12]=stage4-12,out[13]=stage4-13,out[14]=stage4-14,out[15]=stage4-15);
+
+    And (a=zr0, b=zr1, out=zr);
+
+    And (a=zr2, b=zr3, out=zr0);
+    And (a=zr4, b=zr5, out=zr1);
+
+    And (a=zr6, b=zr7, out=zr2);
+    And (a=zr8, b=zr9, out=zr3);
+    And (a=zr10, b=zr11, out=zr4);
+    And (a=zr12, b=zr13, out=zr5);
+
+    And (a=stage4-0, b=stage4-1, out=zr6);
+    And (a=stage4-2, b=stage4-3, out=zr7);
+    And (a=stage4-4, b=stage4-5, out=zr8);
+    And (a=stage4-6, b=stage4-7, out=zr9);
+    And (a=stage4-8, b=stage4-9, out=zr10);
+    And (a=stage4-10, b=stage4-11, out=zr11);
+    And (a=stage4-12, b=stage4-13, out=zr12);
+    And (a=stage4-14, b=stage4-15, out=zr13);
 }
