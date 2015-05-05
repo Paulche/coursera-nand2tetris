@@ -13,8 +13,13 @@
 
 CHIP DMux4Way {
     IN in, sel[2];
-    OUT a, b, c, d;
+    OUT a, b, c, d, dout[4];
 
     PARTS:
-    // Put your code here:
+    Decoder2 (s0=sel[0], s1=sel[1], out=dout);
+    
+    And     (a=in, b=dout[0], out=a);
+    And     (a=in, b=dout[1], out=b);
+    And     (a=in, b=dout[2], out=c);
+    And     (a=in, b=dout[3], out=d);
 }

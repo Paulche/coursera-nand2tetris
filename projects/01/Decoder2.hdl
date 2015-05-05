@@ -1,0 +1,17 @@
+/**
+ *  */
+
+CHIP Decoder2 {
+    IN s0, s1;
+    OUT out[4];
+
+    PARTS:
+    Not   (in=s0, out=not-s0);
+    Not   (in=s1, out=not-s1);
+
+    And   (a=not-s0, b=not-s1, out=out[3]);
+    And   (a=not-s0, b=s1, out=out[2]);
+    And   (a=s0, b=not-s1, out=out[1]);
+    And   (a=s0, b=s1, out=out[0]);
+}
+
