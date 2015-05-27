@@ -22,10 +22,25 @@
  * Screen and Keyboard chip specifications given in the book.
  */
 
+ /*
+  *  0x3FFF: 0011 1111 1111 1111          RAM
+  *  ----------------------------------------
+  *  0x4000: 0100 0000 0000 0000
+  *  0x5FFF: 0101 1111 1111 1111          Screen
+  *  ----------------------------------------
+  *  0x6000: 0110 0000 0000 0000          Keyboard
+  */
+
 CHIP Memory {
     IN in[16], load, address[15];
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+    RAM16K        (in=in,load=load-dmux-a,address=address[0..13],out=out-mux2-a);
+    Screen        (in=in,load=load-dmux-b,address=address[0..12],out=out-mux1-a);
+    Keyboard      (out=out-mux1-b);
+    DMux          (in=load, a=load-dmux-a, b=load-dmux-b, sel=address[14]);
+    Mux16         (a=out-mux1-a, b=out-mux1-b, out=out-mux2-b, sel=address[13]);
+    Mux16         (a=out-mux2-a, b=out-mux2-b, out=out, sel=address[14]);
 }
