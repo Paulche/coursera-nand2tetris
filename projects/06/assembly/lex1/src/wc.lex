@@ -1,30 +1,27 @@
 %{
-int chars = 0;
-int words = 0;
-int lines = 0;
+#include <stdint.h>
+typedef struct _context {
+  uint32_t chars;
+  uint32_t words;
+  uint32_t lines;
+} context_t;
+
+context_t * global_context;
 %}
 
 %%
 
-[^ \t\n\r\f\v]+ { words++; chars += strlen(yytext); }
-\n              { chars++; lines++; }
-.               { chars++; }
+[^ \t\n\r\f\v]+ { global_context->words++; global_context->chars += strlen(yytext); }
+\n              { global_context->chars++; global_context->lines++; }
+.               { global_context->chars++; }
 
 %%
-FILE * yyin; 
-
-int main(int argc, char ** argv)
+void wc_parse(char * path, context_t * context) 
 {
-  if (argc < 2) 
-  {
-    fprintf (stdout, "Usage: %s filename\n", argv[0]);
-    return 0;
-  }
+  global_context = context;
 
-  yyin = fopen(argv[1],"r");
+  yyin = fopen(path,"r");
 
   yylex();
-
-  printf("Lines: %8d\nWords: %8d\nChars: %8d\n",lines, words, chars);
-
 }
+

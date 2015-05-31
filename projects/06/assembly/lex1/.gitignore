@@ -1,1 +1,6 @@
 src/wc.yy.c
+rust-wc/target
+build/*
+libwc.a
+
+
