@@ -4,7 +4,7 @@ extern crate libc;
 #[link(name="wc")]
 #[link(name="l")]
 extern {
-  fn wc_parse(path: *const u8, context: *mut Context);
+  fn yyparse();
 }
 
 #[repr(C)]
@@ -22,7 +22,7 @@ impl Context {
 
     pub fn parse(&mut self, path: &str) {
         unsafe {
-            wc_parse(path.as_ptr(),self);
+            yyparse();
         }
     }
 

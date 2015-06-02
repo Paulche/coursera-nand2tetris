@@ -4,17 +4,30 @@ mod context;
 use context::Context;
 
 use std::env;
+use std::fs::{metadata};
 
-fn main() {
-  if env::args().count() < 2 {
-    println!("Usage: wc $filename")
-  } else {
-    let pathname = env::args().nth(1).unwrap();
+fn usage() {
+    println!("Usage: wc $filename");
+}
+
+fn with_path(path: String) {
+    let meta = metadata(&path).ok();
+
+    if meta.is_none() {
+        println!("ERROR: Failed to open file {}!", path);
+        return;
+    }
 
     let mut context = Context::new();
-    
-    context.parse(&pathname);
+        
+    context.parse(&path);
 
     context.report();
-  }
+}
+
+fn main() {
+    match env::args().nth(1) {
+        None            => usage(),
+        Some(path)      => with_path(path),
+    }
 }
