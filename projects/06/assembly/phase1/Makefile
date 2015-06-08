@@ -26,7 +26,7 @@ clean:
 	rm -rf build/*
 	rm -rf tmp/*
 
-test: test1 test2 bison_version flex_version
+test: bison_version flex_version test1 test2 
 
 test1: target/compiler
 	target/compiler test/Add.asm tmp/Add.hack
