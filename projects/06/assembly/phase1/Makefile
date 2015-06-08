@@ -8,7 +8,7 @@
 # Debug
 OPTIMIZE=-O0
 
-.PHONY: clean test test1 test2
+.PHONY: clean test test1 test2 bison_version flex_version
 
 all: target/compiler
 
@@ -26,7 +26,7 @@ clean:
 	rm -rf build/*
 	rm -rf tmp/*
 
-test: test1 test2
+test: test1 test2 bison_version flex_version
 
 test1: target/compiler
 	target/compiler test/Add.asm tmp/Add.hack
@@ -35,4 +35,11 @@ test1: target/compiler
 test2: target/compiler
 	target/compiler test/MaxL.asm tmp/MaxL.hack
 	diff test/MaxL.hack tmp/MaxL.hack
+
+bison_version:
+	bison --version
+
+flex_version:
+	flex --version
+
 
