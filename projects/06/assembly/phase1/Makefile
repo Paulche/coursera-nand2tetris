@@ -13,7 +13,7 @@ OPTIMIZE=-O0
 all: target/compiler
 
 target/compiler: build/compiler.lex.c build/compiler.y.c
-	cc ${OPTIMIZE} -o target/compiler build/compiler.y.c build/compiler.lex.c -ll 
+	cc ${OPTIMIZE} -std=c99 -o target/compiler build/compiler.y.c build/compiler.lex.c -ll 
 
 build/compiler.lex.c: src/compiler.lex
 	flex -o build/compiler.lex.c src/compiler.lex

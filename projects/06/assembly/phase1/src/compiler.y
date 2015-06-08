@@ -5,6 +5,7 @@ void yyerror(char *s);
 extern FILE * yyin;
 uint16_t data = 0; 
 FILE * out;
+int yylex();
 
 #define SET(offset) ( data |= (1 << offset) )
 
