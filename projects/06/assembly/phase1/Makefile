@@ -19,7 +19,7 @@ build/compiler.lex.c: src/compiler.lex
 	flex -o build/compiler.lex.c src/compiler.lex
 
 build/compiler.y.c: src/compiler.y
-	/opt/boxen/homebrew/opt/bison/bin/bison  -o build/compiler.y.c -d src/compiler.y  
+	bison  -o build/compiler.y.c -d src/compiler.y  
 
 clean: 
 	rm -rf target/*
