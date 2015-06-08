@@ -1,6 +1,5 @@
 language: c
-# compiler:
-#   - gcc
-#   - clang
+compiler:
+  - clang
 # Change this to your needs
 script: make test
