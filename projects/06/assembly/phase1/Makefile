@@ -8,7 +8,7 @@
 # Debug
 OPTIMIZE=-O0
 
-.PHONY: clean test test1 test2 
+.PHONY: clean test test1 test2 test3 test4
 
 all: target/compiler
 
@@ -26,7 +26,7 @@ clean:
 	rm -rf build/*
 	rm -rf tmp/*
 
-test: test1 test2 
+test: test1 test2 test3 test4
 
 test1: target/compiler
 	target/compiler test/Add.asm tmp/Add.hack
@@ -36,4 +36,11 @@ test2: target/compiler
 	target/compiler test/MaxL.asm tmp/MaxL.hack
 	diff test/MaxL.hack tmp/MaxL.hack
 
+test3: target/compiler
+	target/compiler test/RectL.asm tmp/RectL.hack
+	diff test/RectL.hack tmp/RectL.hack
+
+test4: target/compiler
+	target/compiler test/PongL.asm tmp/PongL.hack
+	diff test/PongL.hack tmp/PongL.hack
 
