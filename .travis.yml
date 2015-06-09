@@ -17,6 +17,10 @@ compiler:
 #  # Set the core file limit to unlimited so a core file is generated upon crash
 #  - ulimit -c unlimited -S
 
+notifications:
+  email:
+    - 'paulche@yandex.ru'
+
 script:
   - make test
 #  - RESULT=0
