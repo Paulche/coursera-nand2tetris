@@ -1,13 +1,19 @@
 %{
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
+
+#define ERROR_BUFFER_SIZE     1024
+#define SET(offset)           ( data |= (1 << offset) )
+#define CHECK_FILE(file)      if (file == NULL) { sprintf(error_buffer,"Program panic on %s:%d",__FILE__,__LINE__); perror(error_buffer); exit(1); }
+
 void yyerror(char *s);
 extern FILE * yyin;
 uint16_t data = 0; 
 FILE * out;
 int yylex();
+char error_buffer[ERROR_BUFFER_SIZE] = {0};
 
-#define SET(offset) ( data |= (1 << offset) )
 
 void dump();
 void write();
@@ -53,8 +59,8 @@ dest: M_REGISTER                          { SET(3); }
   ;
 
 comp: ZERO                              { SET(11); SET(9); SET(7); }
-  | ONE                                 
-  | MINUS ONE                           { SET(11); SET(10); SET(9); SET(8); SET(7); SET(6); }
+  | ONE                                 { SET(11); SET(10); SET(9); SET(8); SET(7); SET(6); }
+  | MINUS ONE                           { SET(11); SET(10); SET(9); SET(7); }
   | D_REGISTER                          { SET(9); SET(8); }
   | a_or_m                              { SET(11); SET(10); }
   | EXCLAMATION_POINT D_REGISTER        { SET(9); SET(8); SET(6); }
@@ -89,8 +95,12 @@ jump: JMP     { SET(0); SET(1); SET(2);  }
 int main(int argc, char **argv)
 {
   out = fopen(argv[2], "w+b");
+  
+  CHECK_FILE(out)
 
   yyin = fopen(argv[1], "r");
+
+  CHECK_FILE(yyin)
 
   yyparse();
 }

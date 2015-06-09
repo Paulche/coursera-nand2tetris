@@ -8,12 +8,12 @@
 # Debug
 OPTIMIZE=-O0
 
-.PHONY: clean test test1 test2 bison_version flex_version
+.PHONY: clean test test1 test2 
 
 all: target/compiler
 
 target/compiler: build/compiler.lex.c build/compiler.y.c
-	cc ${OPTIMIZE} -std=c99 -o target/compiler build/compiler.y.c build/compiler.lex.c -ll 
+	cc ${OPTIMIZE} -D_POSIX_SOURCE -std=c99 -o target/compiler build/compiler.y.c build/compiler.lex.c -ll 
 
 build/compiler.lex.c: src/compiler.lex
 	flex -o build/compiler.lex.c src/compiler.lex
@@ -26,7 +26,7 @@ clean:
 	rm -rf build/*
 	rm -rf tmp/*
 
-test: bison_version flex_version test1 test2 
+test: test1 test2 
 
 test1: target/compiler
 	target/compiler test/Add.asm tmp/Add.hack
@@ -35,11 +35,5 @@ test1: target/compiler
 test2: target/compiler
 	target/compiler test/MaxL.asm tmp/MaxL.hack
 	diff test/MaxL.hack tmp/MaxL.hack
-
-bison_version:
-	bison --version
-
-flex_version:
-	flex --version
 
 
