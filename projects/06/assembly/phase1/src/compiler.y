@@ -59,14 +59,14 @@ dest: M_REGISTER                          { SET(3); }
   ;
 
 comp: ZERO                              { SET(11); SET(9); SET(7); }
-  | ONE                                 { SET(10); SET(9); SET(8); SET(7); SET(6); }
+  | ONE                                 { SET(11); SET(10); SET(9); SET(8); SET(7); SET(6); }
   | MINUS ONE                           { SET(11); SET(10); SET(9); SET(7); }
-  | D_REGISTER                          {  SET(8); }
+  | D_REGISTER                          { SET(9); SET(8); }
   | a_or_m                              { SET(11); SET(10); }
-  | EXCLAMATION_POINT D_REGISTER        { SET(9); SET(6); }
+  | EXCLAMATION_POINT D_REGISTER        { SET(9); SET(8); SET(6); }
   | EXCLAMATION_POINT a_or_m            { SET(11); SET(10); SET(6); }
   | MINUS D_REGISTER                    { SET(9); SET(8); SET(7); SET(6); }
-  | MINUS a_or_m                        { SET(11); SET(7); SET(6); }
+  | MINUS a_or_m                        { SET(11); SET(10); SET(7); SET(6); }
   | D_REGISTER PLUS ONE                 { SET(10); SET(9); SET(8); SET(7); SET(6); }
   | a_or_m PLUS ONE                     { SET(11); SET(10); SET(8); SET(7); SET(6); }
   | D_REGISTER MINUS ONE                { SET(9); SET(8); SET(7); }
