@@ -1,22 +1,6 @@
 %{
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-
-#define ERROR_BUFFER_SIZE     1024
-#define SET(offset)           ( data |= (1 << offset) )
-#define CHECK_FILE(file)      if (file == NULL) { sprintf(error_buffer,"Program panic on %s:%d",__FILE__,__LINE__); perror(error_buffer); exit(1); }
-
-void yyerror(char *s);
-extern FILE * yyin;
-uint16_t data = 0; 
-FILE * out;
-int yylex();
-char error_buffer[ERROR_BUFFER_SIZE] = {0};
-
-
-void dump();
-void write();
+#include "main.h"
+#include "bison.h"
 %}
 
 %token AT EQUAL PLUS
@@ -27,8 +11,9 @@ void write();
 %token JMP JLE JNE JLT JGE JEQ JGT 
 
 %%
+
 list: 
-  | list exp EOL { data = 0; } 
+  | list exp EOL { data = 0 } 
   ;
 
 exp: 
@@ -36,7 +21,7 @@ exp:
   | ccode { SET(15); SET(14); SET(13); write(); }
   ;
 
-acode: AT address { data = $2; }
+acode: AT address { data = $2 }
   ;
 
 address: NUMBER
@@ -90,57 +75,3 @@ jump: JMP     { SET(0); SET(1); SET(2);  }
   | JNE       { SET(2); SET(0); }
   | JLE       { SET(2); SET(1); }
   ;
-
-%%
-int main(int argc, char **argv)
-{
-  out = fopen(argv[2], "w+b");
-  
-  CHECK_FILE(out)
-
-  yyin = fopen(argv[1], "r");
-
-  CHECK_FILE(yyin)
-
-  yyparse();
-}
-
-void write() 
-{
-  for (int offset = 15; offset >= 0; offset--) {
-    if (data & (1 << offset)) {
-      fprintf(out,"1");
-    } else {
-      fprintf(out,"0");
-    }
-  }
-  
-  fprintf(out,"\n");
-}
-
-void yyerror(char *s)
-{
-  fprintf(stderr, "error: %s\n", s);
-}
-
-void dump()
-{
-  int padding = 4;
-
-  for (int offset = 15; offset >= 0; offset--) {
-    padding--;
-
-    if (data & (1 << offset)) {
-      printf("1");
-    } else {
-      printf("0");
-    }
-
-    if (!padding) {
-      printf(" ");
-      padding = 4;
-    }
-  }
-  
-  printf("\n");
-}

@@ -12,8 +12,8 @@ OPTIMIZE=-O0
 
 all: target/compiler
 
-target/compiler: build/compiler.lex.c build/compiler.y.c
-	cc ${OPTIMIZE} -D_POSIX_SOURCE -std=c99 -o target/compiler build/compiler.y.c build/compiler.lex.c -ll 
+target/compiler: build/compiler.lex.c build/compiler.y.c src/main.cc include/main.h include/bison.h
+	cc ${OPTIMIZE} -D_POSIX_SOURCE -o target/compiler -I include build/compiler.y.c build/compiler.lex.c src/main.cc -ll 
 
 build/compiler.lex.c: src/compiler.lex
 	flex -o build/compiler.lex.c src/compiler.lex
