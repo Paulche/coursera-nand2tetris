@@ -15,10 +15,11 @@ void yyerror(char *s);
 uint16_t data; 
 char error_buffer[ERROR_BUFFER_SIZE];
 
+void dump();
+void write_w();
+
 #ifdef __cplusplus
 }
 #endif
 
-void dump();
-void write();
 

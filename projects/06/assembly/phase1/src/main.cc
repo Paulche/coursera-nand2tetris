@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
   yyparse();
 }
 
-void write() 
+extern "C" void write_w() 
 {
   for (int offset = 15; offset >= 0; offset--) {
     if (data & (1 << offset)) {

@@ -17,8 +17,8 @@ list:
   ;
 
 exp: 
-  | acode { write(); }
-  | ccode { SET(15); SET(14); SET(13); write(); }
+  | acode { write_w(); }
+  | ccode { SET(15); SET(14); SET(13); write_w(); }
   ;
 
 acode: AT address { data = $2 }

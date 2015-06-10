@@ -13,13 +13,13 @@ OPTIMIZE=-O0
 all: target/compiler
 
 target/compiler: build/compiler.lex.c build/compiler.y.c src/main.cc include/main.h include/bison.h
-	cc ${OPTIMIZE} -D_POSIX_SOURCE -o target/compiler -I include build/compiler.y.c build/compiler.lex.c src/main.cc -ll 
+	cc ${OPTIMIZE} -D_POSIX_SOURCE -DYYDEBUG=1 -o target/compiler -I include build/compiler.y.c build/compiler.lex.c src/main.cc -ll 
 
 build/compiler.lex.c: src/compiler.lex
 	flex -o build/compiler.lex.c src/compiler.lex
 
 build/compiler.y.c: src/compiler.y
-	bison  -o build/compiler.y.c -d src/compiler.y  
+	bison -t -o build/compiler.y.c -d src/compiler.y  
 
 clean: 
 	rm -rf target/*
