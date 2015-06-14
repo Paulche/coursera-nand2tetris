@@ -1,10 +1,10 @@
 
+extern int yyparse (void);
+extern int yylex();
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-int yyparse (void);
 
 #ifdef __cplusplus
 }

@@ -5,7 +5,6 @@
 extern FILE * yyin;
 
 FILE * out;
-int yylex();
 
 uint16_t data = 0; 
 char error_buffer[ERROR_BUFFER_SIZE] = {0};
@@ -23,7 +22,7 @@ int main(int argc, char ** argv)
   yyparse();
 }
 
-extern "C" void write_w() 
+void write_w() 
 {
   for (int offset = 15; offset >= 0; offset--) {
     if (data & (1 << offset)) {
@@ -36,7 +35,7 @@ extern "C" void write_w()
   fprintf(out,"\n");
 }
 
-extern "C" void yyerror(char *s)
+void yyerror(char *s)
 {
   fprintf(stderr, "error: %s\n", s);
 }

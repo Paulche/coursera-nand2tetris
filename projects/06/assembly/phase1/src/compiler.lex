@@ -1,5 +1,5 @@
 %{
-#include "compiler.y.h"
+#include "compiler.y.hh"
 %}
 
 %%

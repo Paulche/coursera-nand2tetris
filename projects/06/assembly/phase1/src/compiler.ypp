@@ -1,7 +1,9 @@
 %{
 #include "main.h"
 #include "bison.h"
+#include "Compiler.hpp"
 %}
+
 
 %token AT EQUAL PLUS
 %token D_REGISTER M_REGISTER A_REGISTER
@@ -13,7 +15,7 @@
 %%
 
 list: 
-  | list exp EOL { data = 0 } 
+  | list exp EOL { data = 0; } 
   ;
 
 exp: 
@@ -21,7 +23,7 @@ exp:
   | ccode { SET(15); SET(14); SET(13); write_w(); }
   ;
 
-acode: AT address { data = $2 }
+acode: AT address { data = $2; }
   ;
 
 address: NUMBER
